@@ -8,21 +8,19 @@ let heartButton = document.getElementById("heart");
 let likes = document.getElementsByClassName("likes");
 let likeTracker = {};
 
+commentForm = document.getElementById("comment-form");
+comments = document.getElementById("list");
+
 let pauseButton = document.getElementById("pause");
 
 function countIncrease() {
     count += 1,
-    counter.textContent = count 
-    if (!(count in likeTracker)) {
-        likeTracker[count] = 0;
-        el = document.createElement('li');
-        likes.appendChild(el);
-    }
+    counter.textContent = count;
 }
 
 function countDecrease() {
     count -=1;
-    counter.textContent = count
+    counter.textContent = count;
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -43,14 +41,27 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     heartButton.addEventListener('click', () => {
-        if (isRunning) {
-            likeTracker[count] += 1;
-            console.log(likeTracker[count]);
-
+        if (isRunning) {            
+            if (!(count in likeTracker)) {
+                likeTracker[count] = 1;
+                let para = document.createElement('p');
+                para.id = count;
+                likes[0].appendChild(para);
+                document.getElementById(count).innerHTML = `${count} received ${likeTracker[count]} likes!`;
+            } else {
+                likeTracker[count] += 1;
+                document.getElementById(count).innerHTML = `${count} received ${likeTracker[count]} likes!`;
+            }
         }
     });
 
-
+    commentForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+        let p = document.createElement('p');
+        p.textContent = `${count}: ${event.target.comment.value}`;
+        comments.appendChild(p);
+        commentForm.reset();
+    })
 
     pauseButton.addEventListener('click', () => {
         if (!isRunning) {
